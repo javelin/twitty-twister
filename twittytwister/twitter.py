@@ -552,6 +552,17 @@ class Twitter(object):
         parser = txml.SavedSearches(delegate)
         return self.__postPage('/saved_searches/create.xml?', parser, args={'query':query})
 
+    def show_status(self, id):
+        """Get the status with the specific id.
+
+        Returns a delegate that will receive the status in a callback."""
+        url = '/statuses/show/%s.xml' % (id)
+        d = defer.Deferred()
+
+        self.__downloadPage(url, txml.Statuses(lambda u: d.callback(u))) \
+            .addErrback(lambda e: d.errback(e))
+
+        return d
 
 
 class TwitterFeed(Twitter):
