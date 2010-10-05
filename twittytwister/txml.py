@@ -194,6 +194,11 @@ class TList(PredefinedXMLHandler):
                     'subscriber_count', 'member_count', 'uri', 'mode']
     COMPLEX_PROPS = [User]
 
+class SavedSearch(PredefinedXMLHandler):
+    MY_TAG = 'saved_search'
+    SIMPLE_PROPS = ['id', 'name', 'query', 'position', 'created_at']
+    COMPLEX_PROPS = []
+
 
 ### simple object list handlers:
 
@@ -240,6 +245,11 @@ class TListList(SimpleListHandler):
     MY_TAG = 'lists'
     ITEM_TYPE = TList
     ITEM_TAG = 'list'
+
+class SavedSearchList(SimpleListHandler):
+    MY_TAG = 'saved_searches'
+    ITEM_TYPE = SavedSearch
+    ITEM_TAG = 'saved_search'
 
 
 class ListPage(PredefinedXMLHandler):
@@ -339,6 +349,8 @@ Statuses = simpleListFactory(StatusList)
 HoseFeed = simpleListFactory(StatusList)
 
 TLists   = simpleListFactory(TListList)
+
+SavedSearches = simpleListFactory(SavedSearchList)
 
 
 class Pager:

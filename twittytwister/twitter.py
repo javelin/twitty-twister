@@ -538,6 +538,20 @@ class Twitter(object):
         return self.__get('/%s/lists.xml' % user, delegate, params,
                           txml.TLists, extra_args=extra_args)
 
+    def saved_searches(self, delegate, params={}, extra_args=None):
+        """Get saved searches
+
+        Calls the delgate once for each status object received."""
+        return self.__get('/saved_searches.xml', delegate, params,
+                          txml.SavedSearches, extra_args=extra_args)
+
+    def create_saved_search(self, query, delegate):
+        """Create saved searches
+
+        Calls the delgate when search is saved."""
+        parser = txml.SavedSearches(delegate)
+        return self.__postPage('/saved_searches/create.xml?', parser, args={'query':query})
+
 
 
 class TwitterFeed(Twitter):
