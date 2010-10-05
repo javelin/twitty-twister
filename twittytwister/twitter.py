@@ -124,6 +124,9 @@ class Twitter(object):
             self.use_auth = True
             self.username = user
             self.password = passwd
+        else:
+            self.username = None
+            self.password = None
 
         if consumer and token:
             self.use_auth = True
@@ -526,6 +529,16 @@ class Twitter(object):
 
         return self.__postMultipart('/account/update_profile_image.xml',
                                     files=(('image', filename, image),))
+
+    def lists(self, delegate, user=None, params={}, extra_args=None):
+        """Get lists
+
+        Calls the delgate once for each status object received."""
+        if not user and self.username is not None: user = self.username
+        return self.__get('/%s/lists.xml' % user, delegate, params,
+                          txml.TLists, extra_args=extra_args)
+
+
 
 class TwitterFeed(Twitter):
     """

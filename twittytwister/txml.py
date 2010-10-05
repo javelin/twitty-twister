@@ -186,6 +186,14 @@ class DirectMessage(PredefinedXMLHandler):
         'sender_screen_name', 'recipient_screen_name']
     COMPLEX_PROPS = [SenderUser, RecipientUser]
 
+# To avoid confusion with 'List' that litters the whole
+# module, we will call this TList for the tag 'list'.
+class TList(PredefinedXMLHandler):
+    MY_TAG = 'list'
+    SIMPLE_PROPS = ['id', 'name', 'full_name', 'slug', 'description',
+                    'subscriber_count', 'member_count', 'uri', 'mode']
+    COMPLEX_PROPS = [User]
+
 
 ### simple object list handlers:
 
@@ -228,6 +236,11 @@ class IDList(SimpleListHandler):
     ITEM_TYPE = XMLStringHandler
     ITEM_TAG = 'id'
 
+class TListList(SimpleListHandler):
+    MY_TAG = 'lists'
+    ITEM_TYPE = TList
+    ITEM_TAG = 'list'
+
 
 class ListPage(PredefinedXMLHandler):
     """Base class for the classes of paging items"""
@@ -240,6 +253,10 @@ class UserListPage(ListPage):
 class IDListPage(ListPage):
     MY_TAG = 'id_list'
     COMPLEX_PROPS = [IDList]
+
+class TListListPage(ListPage):
+    MY_TAG = 'lists_list'
+    COMPLEX_PROPS = [TListList]
 
 
 def topLevelXMLHandler(toplevel_type):
@@ -320,6 +337,8 @@ Direct   = simpleListFactory(DirectMessageList)
 Statuses = simpleListFactory(StatusList)
 
 HoseFeed = simpleListFactory(StatusList)
+
+TLists   = simpleListFactory(TListList)
 
 
 class Pager:
