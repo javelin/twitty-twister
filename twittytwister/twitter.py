@@ -168,9 +168,12 @@ class Twitter(object):
     def _urlencode(self, h):
         rv = []
         for k,v in h.iteritems():
+            if type(k) is unicode:
+                k = k.encode("utf-8")
+            if type(v) is unicode:
+                v = v.encode("utf-8")
             rv.append('%s=%s' %
-                (urllib.quote(k.encode("utf-8")),
-                urllib.quote(v.encode("utf-8"))))
+                      (urllib.quote(k), urllib.quote(v)))
         return '&'.join(rv)
 
     def __encodeMultipart(self, fields, files):
