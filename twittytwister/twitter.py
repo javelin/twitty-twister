@@ -66,6 +66,11 @@ class TwitterClientInfo:
     def get_source (self):
         return self.name
 
+def __ensureUtf8(s):
+    if type(s) is unicode:
+        return s.encode('utf-8')
+    else:
+        return s
 
 def __downloadPage(factory, *args, **kwargs):
     """Start a HTTP download, returning a HTTPDownloader object"""
@@ -89,6 +94,7 @@ def __downloadPage(factory, *args, **kwargs):
     return downloader
 
 def downloadPage(url, file, timeout=0, **kwargs):
+    url = __ensureUtf8(url)
     c = __downloadPage(client.HTTPDownloader, url, file, **kwargs)
     # HTTPDownloader doesn't have the 'timeout' keyword parameter on
     # Twisted 8.2.0, so set it directly:
@@ -97,6 +103,7 @@ def downloadPage(url, file, timeout=0, **kwargs):
     return c
 
 def getPage(url, *args, **kwargs):
+    url = __ensureUtf8(url)
     return __downloadPage(client.HTTPClientFactory, url, *args, **kwargs)
 
 class Twitter(object):
